@@ -2,12 +2,12 @@
 #setwd("/work/ABG/MUSKAN/ShinyApp/")
 #.libPaths("/work/ABG/MUSKAN/ShinyTissues/micromamba/envs/seurat5.3.0/lib/R/library")
 
-
 #https://muskan-16.shinyapps.io/shinyapp/
 
 
 #also opton to run via R but needs downloadable files: runGitHub("Pig_Immune_Tissue_ShinyApp", "kapoormuskan")
 
+#https://muskan-16.shinyapps.io/shinyapp/
 
 library(shiny)
 library(shinythemes)
@@ -102,11 +102,14 @@ ui <- fluidPage(
                                selectInput("deg_dataset2", "Dataset 2:",
                                            choices = names(dataset_choices), selected = "Spleen")
                         ),
+<<<<<<< HEAD
                         fluidRow(
                           column(2, numericInput("padj_thresh", "FDR cutoff", value = 0.05, step = 0.01)),
                           column(2, numericInput("logfc_thresh", "logFC cutoff(Dataset1/Dataset2)", value = 0.25, step = 0.01)),
                           
                         ),
+=======
+>>>>>>> 815108ab6e837eb27c94dedc9b083dc2fd55e20f
                         column(2, uiOutput("deg_group1")),
                         column(2, uiOutput("deg_group2")),
                         column(2, actionButton("run_deg", "Run DEG with Presto", class = "btn-success")),
@@ -147,7 +150,11 @@ ui <- fluidPage(
                              withSpinner(plotOutput("staticDimPlot", height = 700, width = "1200px")) ,
                              br(),
                              h4("Violin Plot by Cell Type"),
+<<<<<<< HEAD
                              withSpinner(plotOutput("violinPlot", height = 1600))# Changed to plotOutput()
+=======
+                             withSpinner(plotOutput("violinPlot", height = 500))# Changed to plotOutput()
+>>>>>>> 815108ab6e837eb27c94dedc9b083dc2fd55e20f
                       )
                       
              ),
@@ -311,12 +318,16 @@ degResults <- eventReactive(input$run_deg, {
   obj1 <- degObj1()
   obj2 <- degObj2()
   req(input$deg_group1_val, input$deg_group2_val)
+<<<<<<< HEAD
   
+=======
+>>>>>>> 815108ab6e837eb27c94dedc9b083dc2fd55e20f
   cells1 <- WhichCells(obj1, idents = input$deg_group1_val)
   cells2 <- WhichCells(obj2, idents = input$deg_group2_val)
   expr1 <- as.matrix(GetAssayData(obj1, layer = "data")[, cells1])
   expr2 <- as.matrix(GetAssayData(obj2, layer = "data")[, cells2])
   expr_combined <- cbind(expr1, expr2)
+<<<<<<< HEAD
   meta_combined <- data.frame(group = rep(c("group1", "group2"), c(ncol(expr1), ncol(expr2))))
   
   results <- presto::wilcoxauc(X = expr_combined, y = meta_combined$group)
@@ -351,6 +362,16 @@ output$deg_results <- DT::renderDataTable({
   
   DT::datatable(filtered_df, options = list(pageLength = 10, scrollX = TRUE), rownames = FALSE)
 })
+=======
+  meta_combined <- data.frame(group = rep(c("group1", "group2"),
+                                          c(ncol(expr1), ncol(expr2))))
+  presto::wilcoxauc(X = expr_combined, y = meta_combined$group)})
+
+# Render table
+output$deg_results <- DT::renderDataTable({
+  req(degResults())
+  DT::datatable(degResults(), options = list(pageLength = 10), rownames = FALSE)})
+>>>>>>> 815108ab6e837eb27c94dedc9b083dc2fd55e20f
 
 # Download handler
 output$download_deg <- downloadHandler(

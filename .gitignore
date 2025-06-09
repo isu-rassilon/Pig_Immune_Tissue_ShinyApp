@@ -5,3 +5,6 @@ www/cloupe_files/
 # Optional: ignore temporary or backup files
 *.Rhistory
 *.RData
+*.rds
+*.cloupe
+
