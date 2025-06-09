@@ -1,0 +1,7 @@
+# Ignore large data files
+data/
+www/cloupe_files/
+
+# Optional: ignore temporary or backup files
+*.Rhistory
+*.RData
