@@ -102,14 +102,13 @@ ui <- fluidPage(
                                selectInput("deg_dataset2", "Dataset 2:",
                                            choices = names(dataset_choices), selected = "Spleen")
                         ),
-<<<<<<< HEAD
+
                         fluidRow(
                           column(2, numericInput("padj_thresh", "FDR cutoff", value = 0.05, step = 0.01)),
                           column(2, numericInput("logfc_thresh", "logFC cutoff(Dataset1/Dataset2)", value = 0.25, step = 0.01)),
                           
                         ),
-=======
->>>>>>> 815108ab6e837eb27c94dedc9b083dc2fd55e20f
+
                         column(2, uiOutput("deg_group1")),
                         column(2, uiOutput("deg_group2")),
                         column(2, actionButton("run_deg", "Run DEG with Presto", class = "btn-success")),
@@ -150,11 +149,11 @@ ui <- fluidPage(
                              withSpinner(plotOutput("staticDimPlot", height = 700, width = "1200px")) ,
                              br(),
                              h4("Violin Plot by Cell Type"),
-<<<<<<< HEAD
+
                              withSpinner(plotOutput("violinPlot", height = 1600))# Changed to plotOutput()
-=======
+
                              withSpinner(plotOutput("violinPlot", height = 500))# Changed to plotOutput()
->>>>>>> 815108ab6e837eb27c94dedc9b083dc2fd55e20f
+
                       )
                       
              ),
