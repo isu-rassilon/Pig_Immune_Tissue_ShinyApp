@@ -150,7 +150,7 @@ ui <- fluidPage(
                              br(),
                              h4("Violin Plot by Cell Type"),
 
-                             withSpinner(plotOutput("violinPlot", height = 1600))# Changed to plotOutput()
+                             withSpinner(plotOutput("violinPlot", height = 1600)),# Changed to plotOutput()
 
                              withSpinner(plotOutput("violinPlot", height = 500))# Changed to plotOutput()
 
@@ -182,7 +182,7 @@ ui <- fluidPage(
                           column(width = 6,
                                  h4("Predicted Cell Type IDs based on Reference Mapping"),
                                  withSpinner(plotOutput("predicted_umap", height = 400))
-                          ),
+                          )
                           # right margin
                         ),
                         
@@ -312,62 +312,43 @@ observeEvent(input$deg_dataset2, {
     selectInput("deg_group2_val", "Cell Type in Dataset 2:", choices = unique(Idents(obj2)))
   })})
 
-# Run presto DEG
 degResults <- eventReactive(input$run_deg, {
   obj1 <- degObj1()
   obj2 <- degObj2()
   req(input$deg_group1_val, input$deg_group2_val)
-
   cells1 <- WhichCells(obj1, idents = input$deg_group1_val)
   cells2 <- WhichCells(obj2, idents = input$deg_group2_val)
   expr1 <- as.matrix(GetAssayData(obj1, layer = "data")[, cells1])
   expr2 <- as.matrix(GetAssayData(obj2, layer = "data")[, cells2])
   expr_combined <- cbind(expr1, expr2)
-
   meta_combined <- data.frame(group = rep(c("group1", "group2"), c(ncol(expr1), ncol(expr2))))
-  
-  results <- presto::wilcoxauc(X = expr_combined, y = meta_combined$group)
-  
-  # keep only group1 results and remove unwanted columns
-
-})
-# Render table
-output$deg_results <- DT::renderDataTable({
-  req(degResults())
-  df <- degResults()
-  
-  df1 <- df[df$group == "group1", ]
-  df2 <- df[df$group == "group2", ]
-  
+  raw_results <- presto::wilcoxauc(X = expr_combined, y = meta_combined$group)
+# Split into two group-specific results
+  df1 <- raw_results[raw_results$group == "group1", ]
+  df2 <- raw_results[raw_results$group == "group2", ] 
+# Merge by gene (feature)
   merged <- merge(df1, df2, by = "feature", suffixes = c("_g1", "_g2"))
   
   final_df <- data.frame(
     Gene = merged$feature,
     AvgExpr_Dataset1 = signif(merged$avgExpr_g1, 3),
     AvgExpr_Dataset2 = signif(merged$avgExpr_g2, 3),
-    logFC = as.numeric(signif(merged$logFC_g1, 3)),
+    logFC = signif(merged$logFC_g1, 3),
     pval = signif(merged$pval_g1, 3),
     padj = signif(merged$padj_g1, 3)
   )
-  
-  # Use UI thresholds
+# Filter using UI thresholds
   filtered_df <- final_df[
     final_df$padj < input$padj_thresh &
       abs(final_df$logFC) > input$logfc_thresh,
   ]
-  
-  DT::datatable(filtered_df, options = list(pageLength = 10, scrollX = TRUE), rownames = FALSE)
+  return(filtered_df)
 })
-
-  meta_combined <- data.frame(group = rep(c("group1", "group2"),
-                                          c(ncol(expr1), ncol(expr2))))
-  presto::wilcoxauc(X = expr_combined, y = meta_combined$group)})
-
-# Render table
+# output render table
 output$deg_results <- DT::renderDataTable({
   req(degResults())
-  DT::datatable(degResults(), options = list(pageLength = 10), rownames = FALSE)})
->>>>>>> 815108ab6e837eb27c94dedc9b083dc2fd55e20f
+  DT::datatable(degResults(), options = list(pageLength = 10, scrollX = TRUE), rownames = FALSE)
+})
 
 # Download handler
 output$download_deg <- downloadHandler(
