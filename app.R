@@ -317,16 +317,13 @@ degResults <- eventReactive(input$run_deg, {
   obj1 <- degObj1()
   obj2 <- degObj2()
   req(input$deg_group1_val, input$deg_group2_val)
-<<<<<<< HEAD
-  
-=======
->>>>>>> 815108ab6e837eb27c94dedc9b083dc2fd55e20f
+
   cells1 <- WhichCells(obj1, idents = input$deg_group1_val)
   cells2 <- WhichCells(obj2, idents = input$deg_group2_val)
   expr1 <- as.matrix(GetAssayData(obj1, layer = "data")[, cells1])
   expr2 <- as.matrix(GetAssayData(obj2, layer = "data")[, cells2])
   expr_combined <- cbind(expr1, expr2)
-<<<<<<< HEAD
+
   meta_combined <- data.frame(group = rep(c("group1", "group2"), c(ncol(expr1), ncol(expr2))))
   
   results <- presto::wilcoxauc(X = expr_combined, y = meta_combined$group)
@@ -361,7 +358,7 @@ output$deg_results <- DT::renderDataTable({
   
   DT::datatable(filtered_df, options = list(pageLength = 10, scrollX = TRUE), rownames = FALSE)
 })
-=======
+
   meta_combined <- data.frame(group = rep(c("group1", "group2"),
                                           c(ncol(expr1), ncol(expr2))))
   presto::wilcoxauc(X = expr_combined, y = meta_combined$group)})
