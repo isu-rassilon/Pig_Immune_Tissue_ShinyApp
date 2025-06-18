@@ -149,10 +149,8 @@ ui <- fluidPage(
                              withSpinner(plotOutput("staticDimPlot", height = 700, width = "1200px")) ,
                              br(),
                              h4("Violin Plot by Cell Type"),
-
-                             withSpinner(plotOutput("violinPlot", height = 1600)),# Changed to plotOutput()
-
-                             withSpinner(plotOutput("violinPlot", height = 500))# Changed to plotOutput()
+                             withSpinner(plotOutput("violinPlot", height = 600)),# Changed to plotOutput()
+                             #withSpinner(plotOutput("violinPlot", height = 500))# Changed to plotOutput()
 
                       )
                       
