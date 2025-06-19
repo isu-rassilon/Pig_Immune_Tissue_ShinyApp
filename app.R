@@ -232,22 +232,22 @@ server <- function(input, output, session) {
   output$download_bm <- downloadHandler(
     filename = function() { "Bone_Marrow.cloupe" },
     content = function(file) {
-      file.copy("www/cloupe_files/bm.cloupe", file)
+      file.copy("data/cloupe_files/bm.cloupe", file)
     } )
   output$download_spleen <- downloadHandler(
     filename = function() { "Spleen.cloupe" },
     content = function(file) {
-      file.copy("www/cloupe_files/sp.cloupe", file)
+      file.copy("data/cloupe_files/sp.cloupe", file)
     } )
   output$download_thymus <- downloadHandler(
     filename = function() { "Thymus.cloupe" },
     content = function(file) {
-      file.copy("www/cloupe_files/th.cloupe", file)
+      file.copy("data/cloupe_files/th.cloupe", file)
     } )
   output$download_ln <- downloadHandler(
     filename = function() { "Lymph_Node.cloupe" },
     content = function(file) {
-      file.copy("www/cloupe_files/ln.cloupe", file)
+      file.copy("data/cloupe_files/ln.cloupe", file)
     })
   
   #reactive function for dataset easy loading for azure team
