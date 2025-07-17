@@ -5,7 +5,7 @@ Matrix
 rsconnect
 memoise
 DT
-presto
+github::immunogenomics/presto
 data.table
 Rcpp
 scales
